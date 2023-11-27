@@ -1,0 +1,236 @@
+********* This is Command used in github 
+
+# some commands related to User :-
+_____________________________________
+1-git config user.name (to know the name of current user)
+
+2-git config user.email (to know the email of current user)
+
+3-git --global config user.name "name"
+
+4-git --global config user.email "email"
+
+-- to set user with token  
+git remote set-url origin https://{token}@github.com/Username/repo.git  (should copy the url with https not ssh)
+
+
+
+## some commands related to repo :-
+__________________________________
+1-git status (to know the files not tracked and not pushed to remote repo)
+
+2-git add file_name/ or git add * (to move your files from Working directory to stageing area)
+ -- git reset head file_name/  (if add file by mistake)
+ -- git reset head  (if add all file and want to reverted)
+
+3-git commit -m " "  (to move your files from Staging area to local repo)
+ -- git reset head~1 (if do commit and need to reverted)
+
+4-git push (remoteName) (branchName)
+ -- git remote -v (or without -v) ==> to know the remotes
+ -- git branch -v (or without -v) ==> to know the branches
+
+5-git pull (remoteName)  ==> if one of my team add file to project(remote repo) and in need to take this file to local repo
+
+
+
+### commands if you have exist project in pc and create repo without clonning :-
+________________________________________________________________________________
+-- open cmd in project directory 
+1- git init   (set all git config to project)
+2- git add . 
+3- git commit -m " "
+ 	-- create repo in github name it any name (prefere with name of your project)
+	-- should do this step first then go to next step
+
+4- git remote add origin git@github.com:Alfawakhry2/{repo_name}.git
+5- git push -u origin (main / master)
+	-- here your project is uploaded to github
+
+
+
+#### commands related to branching :-
+_____________________________________
+1- to show all branches 
+	- git branch 
+
+2- to create new branch 
+	- git branch branchName
+
+3- to swap to any branch 
+	- git checkout branchName
+
+4- to create branch and swap automatically 
+	- git checkout -b branchName
+
+5- to rename branch 
+	- git branch -m newName       ==> You must be in the branch you want to rename 
+
+6-  to delete branch
+	- git branch -d branchName    ==> if this branch contain files not merged (not will be deleted) 
+	- git branch -D branchName    ==> force delete the branch 
+
+
+--- in the branch (not main or master)
+	- can do edit , create and delete files 
+	- can add and commit
+	- can push to my branch (not main) => this means will create pull request and the main will accept if no conflicts found and merge to main branch
+
+
+
+##### commands related to stash :-
+__________________________________
+-- stach mens that , after add file to local repo you store them and not commited or push now (and work with other edit)
+-- example 
+	- git status 
+	- git add . 
+	  ** i need to not commit and not reset head 
+	- git stash 
+	  ** now your file is stored till you need them 
+
+-- how can know the stached files
+	- git stash list
+
+-- now i need the file i stashed what should i do ??!
+	- git stach pop
+	  ** now your files need to commited to push them 
+	- git stash apply
+	  ** same pop but not delete the stash that returned
+
+-- i need to pop specific stash , How ? 
+	- git stash pop stash@{id} =>
+	  ** we can get the id from git stash list
+
+
+-- i need to type description to the stash to make it easy what this stash mean
+	- git stash save " "   => this when i create stash
+
+ 
+-- i need to show the details of stash ?
+	- git stash show ==> return last file
+	- git stash show stash@{id} 
+
+-- i need to drop stash 
+	- git stash drop ==> will delete last stash added
+	- git stash drop stash@{id}  ==> delete specific one
+
+
+-- clear all stash 
+	- git stash clear 
+
+
+
+
+
+###### Commands About Restoring and Cleaning:-
+______________________________________________
+1)restore
+_________
+-- now we add files to staging area and need to undo
+	- git restore --staged * / git restore --staged   (if you add many files)
+	- git restore --staged master.css (to make this file in unstaged area)
+
+2)clean
+_______
+--we need to clean(delete) files that untracked (in unstaged area => not added)
+	- git clean -n  => show you the files will deleted
+	- git clean -f  => delete the files that untracked 
+
+
+
+####### Commands About Reseting The Head (means when i commit and pushed to remote how can i undo or delete the specific commit):-
+__________________________________________________________________________________________________________________________________
+-- head -> is pointer that point to last commit 
+-- can know that from logs 
+	- git log      (appears the all commits and its (id) )
+-- if i need to exit from log 
+	- q
+
+-- how can i delete last commit or any commit i need 
+	-- take the last commit you need it is the last commit happen (take id)
+		- git reset --hard (id)
+
+	-- then do update 
+		- git push origin main/master --force
+
+
+
+
+######## Ignoring files to not uploaded but included in our project:-
+_____________________________________________________________________
+-- at first should create file named .gitignore
+	- touch .gitignore
+-- then open file with vs code 
+	- code .gitignore
+
+-- we can write in file some pattern to ignore what we want 
+	--- This will write in file from vs code
+		- *.log (all file that has extension .log will ignored)
+		- !ahmed.log (this file will not ignored from all .log)
+		- bad.txt (this will ignore)
+
+	--- ignoring whole folder
+		- badfolder/   (this folder will ignored)
+
+------- to search ==> git ignore patterns (https://www.atlassian.com/git/tutorials/saving-changes/gitignore)
+
+
+
+######### Tag and releaseing :-
+_______________________________
+---- what means of tag ==> means that you can do many versions to your project (each new feature has a tag)
+	-- show all tags 
+		- git tag 
+		- git tag -l 
+		- git tag -l "" ==> you can search if you have many tags (ex=> git tag -l "v1.*")
+	
+	-- create tag => there are two types ----> 1)lightweight     2)annotated
+		1) lightweight => take description from the commit 
+		2) annotated   => you add the description when create
+			- git tag (name of tag ) ==> lightweight
+			- git tag -a (name of tag ) -m "description"  ===> annotated	
+
+	-- how to delete tags 
+		1) delete locally 
+			- git tag -d (tag name)
+		2) delete from remote 
+			- git push origin --delete (tag name)
+
+------ note) you can delete from gui (github website) 
+
+------ release ==>This means the description of specific tag (create from gui and also can deleted);
+
+
+
+########## public key :-
+________________
+
+------- ssh-keyegn -t rsa -b 4096 -C ""   ==> to generate public ssh key 
+  	-- add the password and confirmation
+	-- then ==> cat ~/(path of file) 
+	-- take the content copy and go to the github settings and ssh key and add the copy 
+	-- return to cmd and type ==>  ssh -T git@github  then type password  
+
+
+
+########## Alias name of any command:-
+________________________________
+-- if we need to alias command such as (status , commit -m) 
+	- git config --global alias.st status   => if the command has one word
+		=> git st 
+	
+	- git config --global alias.cm "commit -m"   => if the command has more than one commit 
+		=>git cm " " 
+
+
+
+
+
+
+
+***** Some Notes 
+-- readme.md (md->markdown) ==> this have syntax to highlight your document
+-- when we take the link of external repo and put it in (our URL) => we can add to repo without clonning by fork it , and can edit in any file and pull request to owner.
+--
+
+
